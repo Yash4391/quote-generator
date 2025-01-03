@@ -6,40 +6,57 @@
     <title>Quote Generator</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            line-height: 1.6;
-            background: linear-gradient(to bottom right, #f0f8ff, #e6e6fa);
-        }
-        h1 {
-            text-align: center;
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
             color: #333;
-            animation: fadeIn 1.5s;
+        }
+        header {
+            background-color: #fff;
+            color: black;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         label {
             font-weight: bold;
-            display: block;
             margin-bottom: 5px;
+            display: block;
         }
-        input, button, textarea, select {
-            margin-top: 10px;
-            margin-bottom: 20px;
+        input, button, select, textarea {
+            width: 95%;
             padding: 10px;
-            font-size: 1rem;
-            border-radius: 5px;
+            margin-bottom: 20px;
             border: 1px solid #ccc;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s;
         }
-        input:focus, select:focus, button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        input:focus, select:focus, textarea:focus {
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
         }
         button {
             background-color: #007BFF;
+	    width: 30%;
             color: white;
             border: none;
             cursor: pointer;
+            font-size: 1rem;
             padding: 10px 20px;
             transition: background-color 0.3s ease;
         }
@@ -48,141 +65,144 @@
         }
         .option-fields {
             margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
+            padding: 15px;
+            border: 1px solid #ddd;
             background-color: #f9f9f9;
             border-radius: 5px;
-            animation: slideIn 0.8s ease;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         textarea {
-            width: calc(100% - 22px);
-            height: 150px;
             resize: none;
+            height: 150px;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .flex-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
         }
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .flex-container > div {
+            flex: 1;
+            min-width: 150px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <h1>Quote Generator</h1>
-    <form id="quoteForm">
-    <label for="HOA">HOA:</label>
-    <input type="text" id="HOA" placeholder="Enter HOA" required>
+    <header>
+        <h1>Quote Generator</h1>
+    </header>
 
-    <label for="MasterHOA">Master HOA:</label>
-    <select id="MasterHOA" required>
-        <option value="">Select an Option</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-        <option value="Uncertain">Uncertain</option>
-    </select>    
+    <div class="container">
+        <form id="quoteForm">
+            <label for="HOA">HOA:</label>
+            <input type="text" id="HOA" placeholder="Enter HOA" required>
 
-    <label for="PM">PM:</label>
-    <input type="text" id="PM" placeholder="Enter PM" required>
+            <label for="MasterHOA">Master HOA:</label>
+            <select id="MasterHOA" required>
+                <option value="">Select an Option</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                <option value="Uncertain">Uncertain</option>
+            </select>
 
-    <label for="PackageName">Package Name:</label>
-    <input type="text" id="PackageName" placeholder="Enter Package Name" required>
+            <label for="PM">PM:</label>
+            <input type="text" id="PM" placeholder="Enter PM" required>
 
-    <!-- Add the single Document Cost field here -->
-    <label for="DocCost">Document Cost ($):</label>
-    <input type="number" id="DocCost" placeholder="Enter Document Cost" step="0.01" required>
+            <label for="PackageName">Package Name:</label>
+            <input type="text" id="PackageName" placeholder="Enter Package Name" required>
 
-    <label for="Client">Client:</label>
-    <select id="Client" required>
-        <option value="">Select Client</option>
-        <option value="Homeward">Homeward</option>
-        <option value="Purelogic">Purelogic</option>
-    </select>
+            <label for="DocCost">Document Cost ($):</label>
+            <input type="number" id="DocCost" placeholder="Enter Document Cost" step="0.01" required>
 
-    <label for="OptionsCount">Number of Options:</label>
-    <input type="number" id="OptionsCount" placeholder="Enter Number of Options" min="1" required>
+            <label for="Client">Client:</label>
+            <select id="Client" required>
+                <option value="">Select Client</option>
+                <option value="Homeward">Homeward</option>
+                <option value="Purelogic">Purelogic</option>
+            </select>
 
-    <button type="button" onclick="createOptionFields()">Create Options</button>
-</form>
+            <label for="OptionsCount">Number of Options:</label>
+            <input type="number" id="OptionsCount" placeholder="Enter Number of Options" min="1" required>
 
+            <button type="button" onclick="createOptionFields()">Create Options</button>
 
-    <div id="optionsContainer"></div>
+            <label for="CheckPayment">Are we sending a check for payment?</label>
+            <select id="CheckPayment" required>
+                <option value="">Select an Option</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </form>
 
-    <button type="button" onclick="generateQuote()" style="display:none;" id="generateButton">Generate Quote</button>
+        <div id="optionsContainer"></div>
 
-    <h2>Generated Quote</h2>
-    <textarea id="generatedQuote" readonly></textarea>
-    <button type="button" onclick="copyToClipboard()" id="copyButton" style="display:none;">Copy to Clipboard</button>
+        <button type="button" onclick="generateQuote()" style="display:none;" id="generateButton">Generate Quote</button>
+
+        <h2>Generated Quote</h2>
+        <textarea id="generatedQuote" readonly></textarea>
+        <button type="button" onclick="copyToClipboard()" id="copyButton" style="display:none;">Copy to Clipboard</button>
+    </div>
+
+    <footer>
+        &copy; 2025 Quote Generator Inc. All rights reserved.
+    </footer>
 
     <script>
         function createOptionFields() {
-    const optionsContainer = document.getElementById('optionsContainer');
-    const optionsCount = parseInt(document.getElementById('OptionsCount').value);
+            const optionsContainer = document.getElementById('optionsContainer');
+            const optionsCount = parseInt(document.getElementById('OptionsCount').value);
 
-    // Clear any existing fields
-    optionsContainer.innerHTML = '';
+            // Clear existing fields
+            optionsContainer.innerHTML = '';
 
-    // Create input fields for each option
-    for (let i = 1; i <= optionsCount; i++) {
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'option-fields';
+            // Create input fields for each option
+            for (let i = 1; i <= optionsCount; i++) {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option-fields';
 
-        // Add the title (e.g., "Option 1") at the top
-        const title = document.createElement('h3');
-        title.textContent = `Option ${i}`;
-        title.style.color = "#333";
-        optionDiv.appendChild(title);
+                const title = document.createElement('h3');
+                title.textContent = `Option ${i}`;
+                optionDiv.appendChild(title);
 
-        // Add the cost input fields aligned horizontally
-        const costFieldsContainer = document.createElement('div');
-        costFieldsContainer.style.display = 'flex';
-        costFieldsContainer.style.gap = '15px';
-        costFieldsContainer.style.flexWrap = 'wrap';
+                const fieldsHTML = `
+                    <div class="flex-container">
+                        <div>
+                            <label for="RushCost_${i}">Rush Cost ($):</label>
+                            <input type="number" id="RushCost_${i}" placeholder="Enter Rush Cost" step="0.01" required>
+                        </div>
+                        <div>
+                            <label for="ConvFees_${i}">Convenience Fees ($):</label>
+                            <input type="number" id="ConvFees_${i}" placeholder="Enter Convenience Fees" step="0.01" required>
+                        </div>
+                    </div>
+                    <label for="ETAType_${i}">ETA Type:</label>
+                    <select id="ETAType_${i}" onchange="toggleETAInput(${i})" required>
+                        <option value="">Select ETA Type</option>
+                        <option value="BusinessDays">Business Days</option>
+                        <option value="Date">Date</option>
+                    </select>
+                    <div id="BusinessDaysContainer_${i}" style="display:none;">
+                        <label for="BusinessDays_${i}">Number of Business Days:</label>
+                        <input type="number" id="BusinessDays_${i}" placeholder="Enter Business Days" min="1">
+                    </div>
+                    <div id="DateContainer_${i}" style="display:none;">
+                        <label for="Date_${i}">Select Date:</label>
+                        <input type="date" id="Date_${i}">
+                    </div>
+                `;
 
-        const fieldsHTML = `
-    <div>
-        <label for="RushCost_${i}">Rush Cost ($):</label>
-        <input type="number" id="RushCost_${i}" placeholder="Enter Rush Cost" step="0.01" required>
-    </div>
-    <div>
-        <label for="ConvFees_${i}">Convenience Fees ($):</label>
-        <input type="number" id="ConvFees_${i}" placeholder="Enter Convenience Fees" step="0.01" required>
-    </div>
-`;
+                optionDiv.innerHTML += fieldsHTML;
+                optionsContainer.appendChild(optionDiv);
+            }
 
-
-        costFieldsContainer.innerHTML = fieldsHTML;
-        optionDiv.appendChild(costFieldsContainer);
-
-        // Add ETA selection fields below the costs
-        const etaFieldsHTML = `
-            <label for="ETAType_${i}">ETA Type:</label>
-            <select id="ETAType_${i}" onchange="toggleETAInput(${i})" required>
-                <option value="">Select ETA Type</option>
-                <option value="BusinessDays">Business Days</option>
-                <option value="Date">Date</option>
-            </select>
-
-            <div id="BusinessDaysContainer_${i}" style="display:none;">
-                <label for="BusinessDays_${i}">Number of Business Days:</label>
-                <input type="number" id="BusinessDays_${i}" placeholder="Enter Business Days" min="1">
-            </div>
-
-            <div id="DateContainer_${i}" style="display:none;">
-                <label for="Date_${i}">Select Date:</label>
-                <input type="date" id="Date_${i}">
-            </div>
-        `;
-
-        optionDiv.innerHTML += etaFieldsHTML;
-        optionsContainer.appendChild(optionDiv);
-    }
-
-    // Show the generate quote button
-    document.getElementById('generateButton').style.display = 'block';
-}
-
+            // Show the generate button
+            document.getElementById('generateButton').style.display = 'block';
+        }
 
         function toggleETAInput(optionIndex) {
             const etaType = document.getElementById(`ETAType_${optionIndex}`).value;
@@ -201,85 +221,72 @@
             }
         }
 
-            function generateQuote() {
-    // Collect basic details
-    const HOA = document.getElementById('HOA').value;
-    const PM = document.getElementById('PM').value;
-    const PackageName = document.getElementById('PackageName').value;
-    const client = document.getElementById('Client').value;
-    const masterHOA = document.getElementById('MasterHOA').value;
-    const optionsCount = parseInt(document.getElementById('OptionsCount').value);
+        function generateQuote() {
+            const HOA = document.getElementById('HOA').value;
+            const PM = document.getElementById('PM').value;
+            const PackageName = document.getElementById('PackageName').value;
+            const client = document.getElementById('Client').value;
+            const masterHOA = document.getElementById('MasterHOA').value;
+            const checkPayment = document.getElementById('CheckPayment').value;
+            const optionsCount = parseInt(document.getElementById('OptionsCount').value);
+            const DocCost = parseFloat(document.getElementById('DocCost').value) || 0;
+            const rexeraFees = client === 'Homeward' ? 53 : client === 'Purelogic' ? 96 : 0;
+            const shippingFee = checkPayment === 'Yes' ? 27.1 : 0;
 
-    if (!client) {
-        alert('Please select a client.');
-        return;
-    }
+            if (!client) {
+                alert('Please select a client.');
+                return;
+            }
 
-    // Fetch the single Document Cost
-    const DocCost = parseFloat(document.getElementById('DocCost').value) || 0;
+            let quoteContent = `Hi Team,\n\nAs per our research, this property falls under \"${HOA}\" managed by \"${PM}\".\n\n`;
 
-    // Set Rexera Fees based on client selection
-    const rexeraFees = client === 'Homeward' ? 53 : client === 'Purelogic' ? 96 : 0;
+            if (masterHOA === "Yes") {
+                quoteContent += `We have followed up with the PM and they have confirmed there is no other HOA associated with this property other than \"${HOA}\".\n\n`;
+            } else if (masterHOA === "No") {
+                quoteContent += `We are still following up with the PM to confirm if there are any other HOAs associated with this property.\n\n`;
+            }
 
-    // Generate the quote content
-    let quoteContent = `Hi Team,\n\nAs per our research, this property falls under "${HOA}" managed by "${PM}".\n\n`;
+            quoteContent += `Here are the available document ordering options for ${PackageName}:\n\n`;
 
-    // Add comment based on Master HOA selection
-    if (masterHOA === "Yes") {
-        quoteContent += `We have followed up with the PM and they have confirmed there is no other HOA associated with this property other than "${HOA}".\n\n`;
-    } else if (masterHOA === "No") {
-        quoteContent += `We are still following up with the PM to confirm if there are any other HOAs associated with this property.\n\n`;
-    }
+            for (let i = 1; i <= optionsCount; i++) {
+                const RushCost = parseFloat(document.getElementById(`RushCost_${i}`).value) || 0;
+                const ConvFees = parseFloat(document.getElementById(`ConvFees_${i}`).value) || 0;
+                const totalCost = DocCost + rexeraFees + RushCost + ConvFees + shippingFee;
+                let costBreakdown = [];
 
-    quoteContent += `Here are the available document ordering options for ${PackageName}:\n\n`;
+                if (DocCost > 0) costBreakdown.push(`$${DocCost} Document Cost`);
+                if (RushCost > 0) costBreakdown.push(`$${RushCost} Rush Cost`);
+                if (ConvFees > 0) costBreakdown.push(`$${ConvFees} Convenience Fees`);
+                if (shippingFee > 0) costBreakdown.push(`$${shippingFee} Shipping Fee`);
+                if (rexeraFees > 0) costBreakdown.push(`$${rexeraFees} Rexera Fees`);
 
-    // Add options dynamically
-    for (let i = 1; i <= optionsCount; i++) {
-        const RushCost = parseFloat(document.getElementById(`RushCost_${i}`).value) || 0;
-        const ConvFees = parseFloat(document.getElementById(`ConvFees_${i}`).value) || 0;
+                const etaType = document.getElementById(`ETAType_${i}`).value;
+                let eta = "";
 
-        // Calculate total cost
-        const totalCost = DocCost + rexeraFees + RushCost + ConvFees;
+                if (etaType === "BusinessDays") {
+                    const businessDays = document.getElementById(`BusinessDays_${i}`).value;
+                    eta = i === 1 ? `Standard ETA: ${businessDays} Business Days` : `Rush ETA: ${businessDays} Business Days`;
+                } else if (etaType === "Date") {
+                    const date = document.getElementById(`Date_${i}`).value;
+                    eta = i === 1 ? `Standard ETA: ${new Date(date).toLocaleDateString('en-US')}` : `Rush ETA: ${new Date(date).toLocaleDateString('en-US')}`;
+                } else {
+                    eta = 'ETA: Not specified';
+                }
 
-        // Build the cost breakdown
-        let costBreakdown = [];
-        if (DocCost > 0) costBreakdown.push(`$${DocCost} Document Cost`);
-        if (rexeraFees > 0) costBreakdown.push(`$${rexeraFees} Rexera Fees`);
-        if (RushCost > 0) costBreakdown.push(`$${RushCost} Rush Cost`);
-        if (ConvFees > 0) costBreakdown.push(`$${ConvFees} Convenience Fees`);
+                quoteContent += `Option ${i}:\n${eta}\nTotal Cost: $${totalCost} (${costBreakdown.join(' + ')})\n\n`;
+            }
 
-        const etaType = document.getElementById(`ETAType_${i}`).value;
-        let eta = "";
+            quoteContent += `Please let us know which option you prefer so we can proceed with generating seller's invoice.\n\nThank you.`;
 
-        if (etaType === "BusinessDays") {
-            const businessDays = document.getElementById(`BusinessDays_${i}`).value;
-            eta = i === 1 ? `Standard ETA: ${businessDays} Business Days` : `Rush ETA: ${businessDays} Business Days`;
-        } else if (etaType === "Date") {
-            const date = document.getElementById(`Date_${i}`).value;
-            eta = i === 1 ? `Standard ETA: ${new Date(date).toLocaleDateString('en-US')}` : `Rush ETA: ${new Date(date).toLocaleDateString('en-US')}`;
-        } else {
-            eta = 'ETA: Not specified';
+            const generatedQuote = document.getElementById('generatedQuote');
+            generatedQuote.value = quoteContent;
+            document.getElementById('copyButton').style.display = 'block';
         }
-
-        quoteContent += `Option ${i}:\n${eta}\nTotal Cost: $${totalCost} (${costBreakdown.join(' + ')})\n\n`;
-    }
-
-    quoteContent += `Please let us know which option you prefer so we can proceed with generating seller's invoice.\n\nThank you.`;
-
-    // Display the generated quote
-    const generatedQuote = document.getElementById('generatedQuote');
-    generatedQuote.value = quoteContent;
-
-    // Show the copy button
-    document.getElementById('copyButton').style.display = 'block';
-}
-
-
 
         function copyToClipboard() {
             const quote = document.getElementById('generatedQuote');
             quote.select();
-            quote.setSelectionRange(0, 99999); // For mobile devices
+            quote.setSelectionRange(0, 99999);
 
             navigator.clipboard.writeText(quote.value).then(() => {
                 alert('Quote copied to clipboard!');
