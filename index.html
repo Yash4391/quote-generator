@@ -72,35 +72,40 @@
 <body>
     <h1>Quote Generator</h1>
     <form id="quoteForm">
-        <label for="HOA">HOA:</label>
-        <input type="text" id="HOA" placeholder="Enter HOA" required>
-	
-	<label for="MasterHOA">Master HOA:</label>
-	<select id="MasterHOA" required>
-    		<option value="">Select an Option</option>
-    		<option value="Yes">Yes</option>
-    		<option value="No">No</option>
-    		<option value="Uncertain">Uncertain</option>
-	</select>	
+    <label for="HOA">HOA:</label>
+    <input type="text" id="HOA" placeholder="Enter HOA" required>
 
-        <label for="PM">PM:</label>
-        <input type="text" id="PM" placeholder="Enter PM" required>
+    <label for="MasterHOA">Master HOA:</label>
+    <select id="MasterHOA" required>
+        <option value="">Select an Option</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+        <option value="Uncertain">Uncertain</option>
+    </select>    
 
-        <label for="PackageName">Package Name:</label>
-        <input type="text" id="PackageName" placeholder="Enter Package Name" required>
+    <label for="PM">PM:</label>
+    <input type="text" id="PM" placeholder="Enter PM" required>
 
-        <label for="Client">Client:</label>
-        <select id="Client" required>
-            <option value="">Select Client</option>
-            <option value="Homeward">Homeward</option>
-            <option value="Purelogic">Purelogic</option>
-        </select>
+    <label for="PackageName">Package Name:</label>
+    <input type="text" id="PackageName" placeholder="Enter Package Name" required>
 
-        <label for="OptionsCount">Number of Options:</label>
-        <input type="number" id="OptionsCount" placeholder="Enter Number of Options" min="1" required>
+    <!-- Add the single Document Cost field here -->
+    <label for="DocCost">Document Cost ($):</label>
+    <input type="number" id="DocCost" placeholder="Enter Document Cost" step="0.01" required>
 
-        <button type="button" onclick="createOptionFields()">Create Options</button>
-    </form>
+    <label for="Client">Client:</label>
+    <select id="Client" required>
+        <option value="">Select Client</option>
+        <option value="Homeward">Homeward</option>
+        <option value="Purelogic">Purelogic</option>
+    </select>
+
+    <label for="OptionsCount">Number of Options:</label>
+    <input type="number" id="OptionsCount" placeholder="Enter Number of Options" min="1" required>
+
+    <button type="button" onclick="createOptionFields()">Create Options</button>
+</form>
+
 
     <div id="optionsContainer"></div>
 
@@ -136,19 +141,16 @@
         costFieldsContainer.style.flexWrap = 'wrap';
 
         const fieldsHTML = `
-            <div>
-                <label for="DocCost_${i}">Document Cost ($):</label>
-                <input type="number" id="DocCost_${i}" placeholder="Enter Document Cost" step="0.01" required>
-            </div>
-            <div>
-                <label for="RushCost_${i}">Rush Cost ($):</label>
-                <input type="number" id="RushCost_${i}" placeholder="Enter Rush Cost" step="0.01" required>
-            </div>
-            <div>
-                <label for="ConvFees_${i}">Convenience Fees ($):</label>
-                <input type="number" id="ConvFees_${i}" placeholder="Enter Convenience Fees" step="0.01" required>
-            </div>
-        `;
+    <div>
+        <label for="RushCost_${i}">Rush Cost ($):</label>
+        <input type="number" id="RushCost_${i}" placeholder="Enter Rush Cost" step="0.01" required>
+    </div>
+    <div>
+        <label for="ConvFees_${i}">Convenience Fees ($):</label>
+        <input type="number" id="ConvFees_${i}" placeholder="Enter Convenience Fees" step="0.01" required>
+    </div>
+`;
+
 
         costFieldsContainer.innerHTML = fieldsHTML;
         optionDiv.appendChild(costFieldsContainer);
@@ -200,75 +202,78 @@
         }
 
             function generateQuote() {
-        // Collect basic details
-        const HOA = document.getElementById('HOA').value;
-        const PM = document.getElementById('PM').value;
-        const PackageName = document.getElementById('PackageName').value;
-        const client = document.getElementById('Client').value;
-        const masterHOA = document.getElementById('MasterHOA').value;
-        const optionsCount = parseInt(document.getElementById('OptionsCount').value);
+    // Collect basic details
+    const HOA = document.getElementById('HOA').value;
+    const PM = document.getElementById('PM').value;
+    const PackageName = document.getElementById('PackageName').value;
+    const client = document.getElementById('Client').value;
+    const masterHOA = document.getElementById('MasterHOA').value;
+    const optionsCount = parseInt(document.getElementById('OptionsCount').value);
 
-        if (!client) {
-            alert('Please select a client.');
-            return;
-        }
-
-        // Set Rexera Fees based on client selection
-        const rexeraFees = client === 'Homeward' ? 53 : client === 'Purelogic' ? 96 : 0;
-
-        // Generate the quote content
-        let quoteContent = `Hi Team,\n\nAs per our research, this property falls under "${HOA}" managed by "${PM}".\n\n`;
-
-        // Add comment based on Master HOA selection
-        if (masterHOA === "Yes") {
-            quoteContent += `We have followed up with the PM and they have confirmed there is no other HOA associated with this property other than "${HOA}".\n\n`;
-        } else if (masterHOA === "No") {
-            quoteContent += `We are still following up with the PM to confirm if there are any other HOAs associated with this property.\n\n`;
-        }
-
-        quoteContent += `Here are the available document ordering options for ${PackageName}:\n\n`;
-
-        // Add options dynamically
-        for (let i = 1; i <= optionsCount; i++) {
-            const DocCost = parseFloat(document.getElementById(`DocCost_${i}`).value) || 0;
-            const RushCost = parseFloat(document.getElementById(`RushCost_${i}`).value) || 0;
-            const ConvFees = parseFloat(document.getElementById(`ConvFees_${i}`).value) || 0;
-
-            // Calculate total cost
-            const totalCost = DocCost + rexeraFees + RushCost + ConvFees;
-
-            // Build the cost breakdown
-            let costBreakdown = [];
-            if (DocCost > 0) costBreakdown.push(`$${DocCost} Document Cost`);
-            if (rexeraFees > 0) costBreakdown.push(`$${rexeraFees} Rexera Fees`);
-            if (RushCost > 0) costBreakdown.push(`$${RushCost} Rush Cost`);
-            if (ConvFees > 0) costBreakdown.push(`$${ConvFees} Convenience Fees`);
-
-            const etaType = document.getElementById(`ETAType_${i}`).value;
-            let eta = "";
-
-            if (etaType === "BusinessDays") {
-                const businessDays = document.getElementById(`BusinessDays_${i}`).value;
-                eta = i === 1 ? `Standard ETA: ${businessDays} Business Days` : `Rush ETA: ${businessDays} Business Days`;
-            } else if (etaType === "Date") {
-                const date = document.getElementById(`Date_${i}`).value;
-                eta = i === 1 ? `Standard ETA: ${new Date(date).toLocaleDateString('en-US')}` : `Rush ETA: ${new Date(date).toLocaleDateString('en-US')}`;
-            } else {
-                eta = 'ETA: Not specified';
-            }
-
-            quoteContent += `Option ${i}:\n${eta}\nTotal Cost: $${totalCost} (${costBreakdown.join(' + ')})\n\n`;
-        }
-
-        quoteContent += `Please let us know which option you prefer so we can proceed with generating seller's invoice.\n\nThank you.`;
-
-        // Display the generated quote
-        const generatedQuote = document.getElementById('generatedQuote');
-        generatedQuote.value = quoteContent;
-
-        // Show the copy button
-        document.getElementById('copyButton').style.display = 'block';
+    if (!client) {
+        alert('Please select a client.');
+        return;
     }
+
+    // Fetch the single Document Cost
+    const DocCost = parseFloat(document.getElementById('DocCost').value) || 0;
+
+    // Set Rexera Fees based on client selection
+    const rexeraFees = client === 'Homeward' ? 53 : client === 'Purelogic' ? 96 : 0;
+
+    // Generate the quote content
+    let quoteContent = `Hi Team,\n\nAs per our research, this property falls under "${HOA}" managed by "${PM}".\n\n`;
+
+    // Add comment based on Master HOA selection
+    if (masterHOA === "Yes") {
+        quoteContent += `We have followed up with the PM and they have confirmed there is no other HOA associated with this property other than "${HOA}".\n\n`;
+    } else if (masterHOA === "No") {
+        quoteContent += `We are still following up with the PM to confirm if there are any other HOAs associated with this property.\n\n`;
+    }
+
+    quoteContent += `Here are the available document ordering options for ${PackageName}:\n\n`;
+
+    // Add options dynamically
+    for (let i = 1; i <= optionsCount; i++) {
+        const RushCost = parseFloat(document.getElementById(`RushCost_${i}`).value) || 0;
+        const ConvFees = parseFloat(document.getElementById(`ConvFees_${i}`).value) || 0;
+
+        // Calculate total cost
+        const totalCost = DocCost + rexeraFees + RushCost + ConvFees;
+
+        // Build the cost breakdown
+        let costBreakdown = [];
+        if (DocCost > 0) costBreakdown.push(`$${DocCost} Document Cost`);
+        if (rexeraFees > 0) costBreakdown.push(`$${rexeraFees} Rexera Fees`);
+        if (RushCost > 0) costBreakdown.push(`$${RushCost} Rush Cost`);
+        if (ConvFees > 0) costBreakdown.push(`$${ConvFees} Convenience Fees`);
+
+        const etaType = document.getElementById(`ETAType_${i}`).value;
+        let eta = "";
+
+        if (etaType === "BusinessDays") {
+            const businessDays = document.getElementById(`BusinessDays_${i}`).value;
+            eta = i === 1 ? `Standard ETA: ${businessDays} Business Days` : `Rush ETA: ${businessDays} Business Days`;
+        } else if (etaType === "Date") {
+            const date = document.getElementById(`Date_${i}`).value;
+            eta = i === 1 ? `Standard ETA: ${new Date(date).toLocaleDateString('en-US')}` : `Rush ETA: ${new Date(date).toLocaleDateString('en-US')}`;
+        } else {
+            eta = 'ETA: Not specified';
+        }
+
+        quoteContent += `Option ${i}:\n${eta}\nTotal Cost: $${totalCost} (${costBreakdown.join(' + ')})\n\n`;
+    }
+
+    quoteContent += `Please let us know which option you prefer so we can proceed with generating seller's invoice.\n\nThank you.`;
+
+    // Display the generated quote
+    const generatedQuote = document.getElementById('generatedQuote');
+    generatedQuote.value = quoteContent;
+
+    // Show the copy button
+    document.getElementById('copyButton').style.display = 'block';
+}
+
 
 
         function copyToClipboard() {
