@@ -124,6 +124,7 @@
                 <option value="">Select Client</option>
                 <option value="Homeward">Homeward</option>
                 <option value="Purelogic">Purelogic</option>
+		<option value="WestCoastEscrow">West Coast Escrow</option>
             </select>
 
             <label for="OptionsCount">Number of Options:</label>
@@ -230,7 +231,10 @@
             const checkPayment = document.getElementById('CheckPayment').value;
             const optionsCount = parseInt(document.getElementById('OptionsCount').value);
             const DocCost = parseFloat(document.getElementById('DocCost').value) || 0;
-            const rexeraFees = client === 'Homeward' ? 53 : client === 'Purelogic' ? 96 : 0;
+            let rexeraFees = 0;
+if (client === 'Homeward') rexeraFees = 53;
+else if (client === 'Purelogic') rexeraFees = 96;
+
             const shippingFee = checkPayment === 'Yes' ? 27.1 : 0;
 
             if (!client) {
@@ -276,7 +280,7 @@
                 quoteContent += `Option ${i}:\n${eta}\nTotal Cost: $${totalCost} (${costBreakdown.join(' + ')})\n\n`;
             }
 
-            quoteContent += `Please let us know which option you prefer so we can proceed with generating seller's invoice.\n\nThank you.`;
+            quoteContent += `Please let us know which option you prefer so we can proceed with generating seller's invoice.\n\nThe RUSH ETA and cost are valid as of today and might change depending on when we request the rush option.\n\nThank you.`;
 
             const generatedQuote = document.getElementById('generatedQuote');
             generatedQuote.value = quoteContent;
