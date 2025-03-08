@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resale Quote Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; background-color: #f4f4f9; }
+        .container { background: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
+        input, button { padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; width: 100%; }
+        button { background: #007BFF; color: white; cursor: pointer; font-weight: bold; }
+        button:hover { background: #0056b3; }
+        .quote-box { white-space: pre-wrap; background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd; margin-top: 10px; }
+        .options-container { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .option-group { background: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 10px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); }
+        label { font-weight: bold; display: block; margin-top: 10px; }
+        h2, h3 { text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Cornerstone</h2>
+        <label>Client Name</label>
+        <input type="text" id="clientName">
+        
+        <label>HOA Name</label>
+        <input type="text" id="hoaName">
+        
+        <label>PM Name</label>
+        <input type="text" id="pmName">
+        
+        <label>Document Cost</label>
+        <input type="number" id="documentCost">
+        
+        <div class="options-container">
+            <label>Number of Opts.</label>
+            <input type="number" id="numOptions" min="1">
+            <button onclick="createOptions()">Create Options</button>
+        </div>
+        
+        <div id="options"></div>
+        <button onclick="generateQuote()">Generate Quote</button>
+        <button onclick="copyQuote()">Copy to Clipboard</button>
+        <h3>Generated Quote:</h3>
+        <div id="quoteOutput" class="quote-box"></div>
+    </div>
+
+    <script>
+        let options = [];
+        
+        function createOptions() {
+            const numOptions = parseInt(document.getElementById('numOptions').value) || 1;
+            options = [];
+            document.getElementById('options').innerHTML = '';
+            
+            for (let i = 0; i < numOptions; i++) {
+                options.push({ rushCost: 0, eta: 5, processingCost: 0 });
+                document.getElementById('options').innerHTML += `
+                    <div class="option-group">
+                        <h4>${i === 0 ? 'Standard Option' : 'Rush Option ' + i}</h4>
+                        <label>ETA (Business Days)</label>
+                        <input type="number" onchange="updateOption(${i}, 'eta', this.value)">
+                        <label>Rush Cost</label>
+                        <input type="number" onchange="updateOption(${i}, 'rushCost', this.value)">
+                        <label>Processing Cost</label>
+                        <input type="number" onchange="updateOption(${i}, 'processingCost', this.value)">
+                    </div>`;
+            }
+        }
+
+        function updateOption(index, field, value) {
+            options[index][field] = parseFloat(value) || 0;
+        }
+
+        function calculateProcessingFee(docCost, rushFee, procCost) {
+            let totalDocCostTemp = docCost + rushFee + procCost;
+            let threePointThreeRule = 0.033 * (totalDocCostTemp + 75);
+            let constant = 0.30;
+            let processingFee = (constant + threePointThreeRule).toFixed(2);
+            return processingFee;
+        }
+
+        function generateQuote() {
+            const clientName = document.getElementById('clientName').value;
+            const hoaName = document.getElementById('hoaName').value;
+            const pmName = document.getElementById('pmName').value;
+            const documentCost = parseFloat(document.getElementById('documentCost').value) || 0;
+            
+            let quote = `Hi ${clientName},\n\nAs per our research, the property falls under the HOA '${hoaName}', which is managed by '${pmName}'.\n\n`;
+            quote += `Please find the available order options for 'Resale package/Demand' listed below.\n\n`;
+            
+            options.forEach((option, index) => {
+                const processingFee = parseFloat(calculateProcessingFee(documentCost, option.rushCost, option.processingCost));
+                let totalDocCostTemp = documentCost + option.rushCost + option.processingCost;
+                let totalDocCost = (totalDocCostTemp + parseFloat(processingFee) + 75).toFixed(2);
+                quote += `${index === 0 ? '1. Standard' : index + 1 + '. Rush'} with ETA ${option.eta} Business Days and a total cost of $${totalDocCost} (including the documents cost of $${documentCost}`;
+                if (option.rushCost > 0) quote += ` + Rush Fee of $${option.rushCost}`;
+                quote += ` + Processing Fee: $${processingFee}).\n\n`;
+            });
+            
+            quote += `The list of HOA Documents:\n- Annual Budget Report\n- Articles of Incorporation\n- Bylaws\n- CC&Rs\n- Financial Statement Review\n- Insurance Dec Page\n- Minutes of Regular Board Meetings\n- Operating Rules\n- Rental Restrictions\n- Required Statement of Fees - Demand\n\n`;
+            quote += `Upon receiving your confirmation of the delivery option, we will proceed with the order and send the Pre-payment Invoice to the seller.\n\nPlease let us know if you have any further questions.\n\nThank you.`;
+            
+            document.getElementById('quoteOutput').innerText = quote;
+        }
+
+        function copyQuote() {
+            const quoteText = document.getElementById('quoteOutput').innerText;
+            navigator.clipboard.writeText(quoteText).then(() => alert('Quote copied to clipboard!'));
+        }
+    </script>
+</body>
+</html>
